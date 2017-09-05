@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <!--CREATING OPPORTUNITY/JOB STAGES-->
+  <record model="crm.stage" id="crm_stage_new">
+    <field name="name">New</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_research">
+    <field name="name">Research</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_quote_sent">
+    <field name="name">Quote Sent</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_invoice_sent">
+    <field name="name">Invoice Sent</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_invoice_paid">
+    <field name="name">Invoice Paid</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_po_sent">
+    <field name="name">PO Sent</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_po_paid">
+    <field name="name">PO Paid</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_shipping">
+    <field name="name">Shipping</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_delivered">
+    <field name="name">Delivered</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_completed">
+    <field name="name">Completed</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_hold">
+    <field name="name">On Hold</field>
+  </record>
+  <record model="crm.stage" id="crm_stage_canceled">
+    <field name="name">Canceled</field>
+  </record>
+  <!--Sequence for job number -->
+  <record model="ir.sequence" id="sequence_job_number">
+    <field name="name"> Job Number Sequence</field>
+    <field name="padding">6</field>
+    <field name="number_increment">1</field>
+    <field name="code">gs_custo_ps.sequence_job_number</field>
+  </record>
+</odoo>

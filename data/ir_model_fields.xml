@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <!--Research Model Fields-->
+    <record model="ir.model.fields" id="field_crm_research_product">
+        <field name="field_description">Product</field>
+        <field name="name">x_product_id</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="relation">product.product</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_research_product_img">
+        <field name="field_description">Product Image</field>
+        <field name="name">x_product_image</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="related">x_product_id.product_tmpl_id.image</field>
+        <field name="ttype">binary</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_research_Job">
+        <field name="field_description">Job</field>
+        <field name="name">x_job_id</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="relation">crm.lead</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_research_color">
+        <field name="field_description">Color Index</field>
+        <field name="name">x_color</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">integer</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_research_type">
+        <field name="field_description">Type</field>
+        <field name="name">x_type</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="required" eval="True"/>
+        <field name="relation">sale.layout_category</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_research_approved">
+        <field name="field_description">Approved</field>
+        <field name="name">x_approved</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">boolean</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_research_notes">
+        <field name="field_description">Notes</field>
+        <field name="name">x_notes</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">text</field>
+    </record>
+    <!--CRM LEAD FIELDS -->
+    <record model="ir.model.fields" id="field_crm_lead_code">
+        <field name="field_description">Job Number</field>
+        <field name="name">x_job_number</field>
+        <field name="model">crm.lead</field>
+        <field name="model_id" ref="crm.model_crm_lead" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">char</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_lead_research">
+        <field name="field_description">Research</field>
+        <field name="name">x_research_ids</field>
+        <field name="model">crm.lead</field>
+        <field name="model_id" ref="crm.model_crm_lead" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="relation">x_crm.research</field>
+        <field name="relation_field">x_job_id</field>
+        <field name="ttype">one2many</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_lead_invoiced">
+        <field name="field_description">Sales Invoices</field>
+        <field name="name">x_invoiced</field>
+        <field name="model">crm.lead</field>
+        <field name="model_id" ref="crm.model_crm_lead" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_lead_billed">
+        <field name="field_description">Vendor Bills</field>
+        <field name="name">x_billed</field>
+        <field name="model">crm.lead</field>
+        <field name="model_id" ref="crm.model_crm_lead" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_lead_profit">
+        <field name="field_description">Profit</field>
+        <field name="name">x_profit</field>
+        <field name="model">crm.lead</field>
+        <field name="model_id" ref="crm.model_crm_lead" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+        <field name="depends">x_invoiced,x_billed</field>
+        <field name="compute"><![CDATA[for record in self:
+          record['x_profit'] = record.x_invoiced - record.x_billed
+        ]]></field>
+    </record>
+    <record model="ir.model.fields" id="field_crm_lead_margin">
+        <field name="field_description">Margin</field>
+        <field name="name">x_margin</field>
+        <field name="model">crm.lead</field>
+        <field name="model_id" ref="crm.model_crm_lead" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">float</field>
+        <field name="depends">x_profit,x_invoiced,x_billed</field>
+        <field name="compute"><![CDATA[for record in self:
+        if record.x_invoiced > 0:
+          record['x_margin'] = (record.x_profit/record.x_invoiced) * 100
+        else:
+          record['x_margin'] = 0
+        ]]></field>
+    </record>
+  </data>
+</odoo>

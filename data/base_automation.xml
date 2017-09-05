@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record model="base.automation" id="action_assign_job_number">
+    <field name="name">[JOS] Assign Job Number Sequence</field>
+    <field name="trigger">on_create</field>
+    <field name="model_id" ref="crm.model_crm_lead"/>
+    <field name="state">code</field>
+    <field name="code">
+      <![CDATA[
+      if record.name:
+        code = int(env['ir.sequence'].next_by_code('gs_custo_ps.sequence_job_number'))
+        record['x_job_number'] = code
+      ]]>
+    </field>
+  </record>
+</odoo>
