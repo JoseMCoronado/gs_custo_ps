@@ -8,5 +8,12 @@
       <field name="state">manual</field>
       <field name="transient" eval="False"/>
     </record>
+    <record model="ir.model" id="model_crm_progress">
+      <field name="info">CRM Progress</field>
+      <field name="model">x_crm.progress</field>
+      <field name="name">CRM Progress</field>
+      <field name="state">manual</field>
+      <field name="transient" eval="False"/>
+    </record>
   </data>
 </odoo>

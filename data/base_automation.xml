@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <!--Sequence for job number -->
+  <record model="ir.sequence" id="sequence_job_number">
+    <field name="name"> Job Number Sequence</field>
+    <field name="padding">6</field>
+    <field name="number_increment">1</field>
+    <field name="code">gs_custo_ps.sequence_job_number</field>
+  </record>
   <record model="base.automation" id="action_assign_job_number">
     <field name="name">[JOS] Assign Job Number Sequence</field>
     <field name="trigger">on_create</field>
@@ -10,6 +17,32 @@
       if record.name:
         code = int(env['ir.sequence'].next_by_code('gs_custo_ps.sequence_job_number'))
         record['x_job_number'] = code
+      ]]>
+    </field>
+  </record>
+  <record model="base.automation" id="action_create_quotation_lines">
+    <field name="name">[JOS] Create Quotation Lines from Opp</field>
+    <field name="trigger">on_change</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="state">code</field>
+    <field name="on_change_fields">opportunity_id</field>
+    <field name="code">
+      <![CDATA[
+      if record.opportunity_id:
+        new_lines = record.env['sale.order.line']
+        for line in record.opportunity_id.x_research_ids:
+            if line.x_approved == '1':
+                 vals = {
+                        'product_id': line.x_product_id.id,
+                        'layout_category_id': line.x_type.id,
+                        'product_uom_qty': line.x_quantity,
+                        'name': line.x_notes,
+                        'product_uom': line.x_product_id.uom_id.id,
+                        'price_unit': line.x_price,
+                     }
+                 new_line = new_lines.new(vals)
+                 new_lines += new_line
+        record['order_line'] += new_lines
       ]]>
     </field>
   </record>

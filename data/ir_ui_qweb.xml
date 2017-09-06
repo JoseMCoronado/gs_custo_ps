@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record model="ir.ui.view" id="report_research_document">
+      <field name="name">report_research_document</field>
+      <field name="type">qweb</field>
+      <field name="model" eval="False"/>
+      <field name="inherit_id" eval="False"/>
+      <field name="priority">16</field>
+      <field name="arch" type="xml">
+        <t t-name="gs_custo_ps.report_research_document">
+            <t t-call="report.external_layout">
+                <t t-set="doc" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
+                <div class="page">
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <div class="col-xs-6">
+                        </div>
+                        <div class="col-xs-5 col-xs-offset-1">
+                            <div t-field="doc.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                        </div>
+                    </div>
+
+                    <h2>
+                        <t>
+                            <span>Research # </span>
+                        </t>
+                        <span t-field="doc.x_job_number"/>
+                    </h2>
+
+                    <div class="row mt32 mb32" id="informations">
+                        <div class="col-xs-3">
+                            <strong>Document Date:</strong>
+                            <p t-esc="datetime.datetime.now().strftime('%m/%d/%Y')"/>
+                        </div>
+                        <div t-if="doc.user_id.name" class="col-xs-3">
+                            <strong>Salesperson:</strong>
+                            <p t-field="doc.user_id"/>
+                        </div>
+                        <div t-if="doc.date_deadline" class="col-xs-3">
+                            <strong>Deadline:</strong>
+                            <p t-field="doc.date_deadline"/>
+                        </div>
+                    </div>
+
+                    <t t-set="display_image" t-value="any([l.x_product_id.image for l in doc.x_research_ids])"/>
+
+                    <t t-set="layout_category_dict" t-value="{}"/>
+                    <t t-foreach="doc.x_research_ids" t-as="o">
+                      <t>
+                        <t t-set="line_amount" t-value="layout_category_dict.get(o.x_type.name,[False])"/>
+                        <t t-esc="layout_category_dict.update({o.x_type.name: [True]})"/>
+                      </t>
+                    </t>
+                    <t>
+                      <t t-foreach="layout_category_dict.items()" t-as="page">
+                        <h3><span t-esc="page[0]"/></h3>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th>Description</th>
+                                    <th>Notes</th>
+                                    <th class="text-right">Quantity</th>
+                                    <th class="text-right">Price</th>
+                                    <th class="text-right">Subtotal</th>
+                                </tr>
+                           </thead>
+                           <tbody class="sale_tbody">
+                               <t t-foreach="doc.x_research_ids" t-as="l">
+                                  <tr t-if="l.x_type.name == page[0]">
+                                      <td width="35%">
+                                        <div>
+                                          <span t-field="l.x_product_id.name"/>
+                                        </div>
+                                        <div t-if="display_image">
+                                          <img t-if="l.x_product_image" t-att-src="'data:image/png;base64,'+l.x_product_image" style="max-height: 200px;"/>
+                                        </div>
+                                      </td>
+                                      <td width="35%">
+                                          <span t-field="l.x_notes"/>
+                                      </td>
+                                      <td width="10%" class="text-right">
+                                          <span t-field="l.x_quantity"/>
+                                      </td>
+                                      <td width="10%" class="text-right">
+                                          <span t-field="l.x_price"/>
+                                      </td>
+                                      <td width="10%" class="text-right">
+                                          <span t-field="l.x_subtotal"/>
+                                      </td>
+                                  </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        </t>
+
+                        <!--<t t-if="page_index &lt; page_size - 1">
+                            <p style="page-break-before:always;"> </p>
+                        </t>-->
+                    </t>
+                    <div class="oe_structure"/>
+                </div>
+            </t>
+        </t>
+      </field>
+    </record>
+  <record model="ir.ui.view" id="report_research">
+      <field name="name">report_research</field>
+      <field name="type">qweb</field>
+      <field name="model" eval="False"/>
+      <field name="inherit_id" eval="False"/>
+      <field name="priority">16</field>
+      <field name="arch" type="xml">
+        <t t-name="gs_custo_ps.report_research">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="gs_custo_ps.report_research_document" t-lang="doc.partner_id.lang"/>
+                </t>
+            </t>
+        </t>
+      </field>
+    </record>
+    <record model="ir.actions.report.xml" id="report_report_research">
+      <field name="name">Research Document</field>
+      <field name="report_type">qweb-pdf</field>
+      <field name="model">crm.lead</field>
+      <field name="report_name">gs_custo_ps.report_research</field>
+    </record>
+    <record model="ir.ui.view" id="saleorder_document_mod">
+        <field name="name">x_jos.report_saleorder_document.mod</field>
+        <field name="inherit_id" ref="sale.report_saleorder_document"/>
+        <field name="priority">16</field>
+        <field name="arch" type="xml">
+          <xpath expr="//t[@t-set='display_discount']" position="after">
+              <t t-set="display_image" t-value="any([l.product_id.image_medium for l in doc.order_line])"/>
+          </xpath>
+          <xpath expr="//table[@class='table table-condensed']/thead/tr/th" position="before">
+            <th t-if="display_image"> </th>
+          </xpath>
+          <xpath expr="//tbody[@class='sale_tbody']//span[@t-field='l.name']/.." position="before">
+              <td t-if="display_image"><img t-if="l.product_id.image_medium" t-att-src="'data:image/png;base64,'+l.product_id.image_medium" style="max-height: 150px;"/></td>
+          </xpath>
+        </field>
+      </record>
+</odoo>

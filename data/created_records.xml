@@ -1,47 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <!--CREATING OPPORTUNITY/JOB STAGES-->
-  <record model="crm.stage" id="crm_stage_new">
-    <field name="name">New</field>
-  </record>
   <record model="crm.stage" id="crm_stage_research">
     <field name="name">Research</field>
+    <field name="sequence">50</field>
   </record>
   <record model="crm.stage" id="crm_stage_quote_sent">
     <field name="name">Quote Sent</field>
+    <field name="sequence">60</field>
   </record>
   <record model="crm.stage" id="crm_stage_invoice_sent">
     <field name="name">Invoice Sent</field>
+    <field name="sequence">70</field>
   </record>
   <record model="crm.stage" id="crm_stage_invoice_paid">
     <field name="name">Invoice Paid</field>
+    <field name="sequence">80</field>
   </record>
   <record model="crm.stage" id="crm_stage_po_sent">
     <field name="name">PO Sent</field>
+    <field name="sequence">91</field>
   </record>
   <record model="crm.stage" id="crm_stage_po_paid">
     <field name="name">PO Paid</field>
+    <field name="sequence">92</field>
   </record>
   <record model="crm.stage" id="crm_stage_shipping">
     <field name="name">Shipping</field>
+    <field name="sequence">93</field>
   </record>
   <record model="crm.stage" id="crm_stage_delivered">
     <field name="name">Delivered</field>
+    <field name="sequence">94</field>
   </record>
   <record model="crm.stage" id="crm_stage_completed">
     <field name="name">Completed</field>
+    <field name="sequence">95</field>
   </record>
   <record model="crm.stage" id="crm_stage_hold">
     <field name="name">On Hold</field>
+    <field name="sequence">96</field>
   </record>
   <record model="crm.stage" id="crm_stage_canceled">
     <field name="name">Canceled</field>
+    <field name="sequence">97</field>
   </record>
-  <!--Sequence for job number -->
-  <record model="ir.sequence" id="sequence_job_number">
-    <field name="name"> Job Number Sequence</field>
-    <field name="padding">6</field>
-    <field name="number_increment">1</field>
-    <field name="code">gs_custo_ps.sequence_job_number</field>
+  <!--Progress Records-->
+  <record model="x_crm.progress" id="crm_progress_1">
+    <field name="x_name">Research Sent</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_2">
+    <field name="x_name">Sending Samples</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_3">
+    <field name="x_name">Samples Delivered</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_4">
+    <field name="x_name">Waiting for Freight Quote</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_5">
+    <field name="x_name">Quote Submitted - Waiting for Approval</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_6">
+    <field name="x_name">Quote Approved</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_7">
+    <field name="x_name">Waiting for Payment</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_8">
+    <field name="x_name">Ordering</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_9">
+    <field name="x_name">Ordered</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_10">
+    <field name="x_name">Need to Ship</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_11">
+    <field name="x_name">Waiting for Product to be in Stock</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_12">
+    <field name="x_name">Return</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_13">
+    <field name="x_name">Waiting for Refund</field>
+  </record>
+  <record model="x_crm.progress" id="crm_progress_14">
+    <field name="x_name">Refunded</field>
+  </record>
+  <!--Creating Sources-->
+  <record model="utm.source" id="utm_source_1">
+    <field name="name">RFP Call</field>
+  </record>
+  <record model="utm.source" id="utm_source_2">
+    <field name="name">YBS Call</field>
+  </record>
+  <record model="utm.source" id="utm_source_3">
+    <field name="name">Email</field>
+  </record>
+  <record model="utm.source" id="utm_source_4">
+    <field name="name">Existing</field>
+  </record>
+  <record model="utm.source" id="utm_source_5">
+    <field name="name">Referral</field>
+  </record>
+  <record model="utm.source" id="utm_source_6">
+    <field name="name">Trade Show - NRA</field>
   </record>
 </odoo>

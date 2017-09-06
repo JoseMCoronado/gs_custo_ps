@@ -11,11 +11,12 @@ Core workflow customizations/developments.
         """,
     'depends': ['base','crm','sale'],
     'data': [
-        'data/created_records.xml',
         'data/ir_model.xml',
         'data/ir_model_fields.xml',
         'data/ir_ui_views.xml',
         'data/base_automation.xml',
+        'data/created_records.xml',
+        'data/ir_ui_qweb.xml'
     ],
     'installable': True,
 }
