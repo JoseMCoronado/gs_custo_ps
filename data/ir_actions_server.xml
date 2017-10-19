@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record model="ir.actions.server" id="action_opp_invoices">
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="name">[JOS] Open Invoices from Opportunity</field>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code"><![CDATA[
+saleorders = record.order_ids.mapped('name')
+invoices = env['account.invoice'].search([('origin','in',saleorders)]).ids
+action_data = env.ref('account.action_invoice_tree1').read()[0]
+action_data.update({'domain':[('id','in',invoices)]})
+action = action_data
+        ]]>
+      </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_window_opp_purchase_order">
+      <field name="name">Purchase Orders</field>
+      <field name="res_model">purchase.order</field>
+      <field name="groups_id" eval="[(6, 0, [])]"/>
+      <field name="auto_search" eval="True"/>
+      <field name="context">{}</field>
+      <field name="limit">80</field>
+      <field name="target">current</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.server" id="action_opp_purchase_orders">
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="name">[JOS] Open Purchase Orders from Opportunity</field>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code"><![CDATA[
+sale_orders = record.order_ids.mapped('name')
+purchase_orders = record.env['purchase.order'].search([('origin','in',sale_orders)]).ids
+action_data = env.ref('gs_custo_ps.action_window_opp_purchase_order').read()[0]
+action_data.update({'domain':[('id','in',purchase_orders)]})
+action = action_data
+        ]]>
+      </field>
+    </record>
+    <record model="ir.actions.server" id="action_opp_transfers">
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="name">[JOS] Open Transfers from Opportunity</field>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code"><![CDATA[
+action_data = env.ref('stock.action_picking_tree_all').read()[0]
+action_data.update({'domain':[('x_job_number','=',record.x_job_number)]})
+action = action_data
+        ]]>
+      </field>
+    </record>
+    <record model="ir.actions.act_window" id="action_window_opp_activities">
+      <field name="name">Activities</field>
+      <field name="res_model">mail.activity</field>
+      <field name="groups_id" eval="[(6, 0, [])]"/>
+      <field name="auto_search" eval="True"/>
+      <field name="context">{}</field>
+      <field name="limit">80</field>
+      <field name="target">current</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.server" id="action_opp_activities">
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="name">[JOS] Open Activities from Opportunity</field>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code"><![CDATA[
+model = record.env.ref('crm.model_crm_lead').id
+action_data = env.ref('gs_custo_ps.action_window_opp_activities').read()[0]
+action_data.update({'domain':[('res_model_id','=',model),('res_id','=',record.id)]})
+action = action_data
+        ]]>
+      </field>
+    </record>
+  </data>
+</odoo>

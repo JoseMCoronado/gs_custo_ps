@@ -36,13 +36,31 @@
                         'product_id': line.x_product_id.id,
                         'layout_category_id': line.x_type.id,
                         'product_uom_qty': line.x_quantity,
-                        'name': line.x_notes,
+                        'name': line.x_notes or line.x_product_id.description_sale,
                         'product_uom': line.x_product_id.uom_id.id,
                         'price_unit': line.x_price,
                      }
                  new_line = new_lines.new(vals)
                  new_lines += new_line
         record['order_line'] += new_lines
+      ]]>
+    </field>
+  </record>
+  <record model="base.automation" id="action_populate_product_values">
+    <field name="name">[JOS] Populate Product Reserach Fields on Selection</field>
+    <field name="trigger">on_change</field>
+    <field name="model_id" ref="gs_custo_ps.model_crm_research"/>
+    <field name="state">code</field>
+    <field name="on_change_fields">x_product_id</field>
+    <field name="code">
+      <![CDATA[
+      if record.x_product_id:
+        vals = {
+               'x_product_vendor': record.x_product_id.seller_ids[0].name.id or False,
+               'x_price': record.x_product_id.list_price or False,
+               'x_notes': record.x_product_id.description_sale or False,
+            }
+        record.update(vals)
       ]]>
     </field>
   </record>

@@ -27,6 +27,64 @@
         <field name="related">x_product_id.product_tmpl_id.image</field>
         <field name="ttype">binary</field>
     </record>
+    <record model="ir.model.fields" id="research_product_default_code">
+        <field name="field_description">SKU</field>
+        <field name="name">x_product_sku</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="related">x_product_id.product_tmpl_id.default_code</field>
+        <field name="ttype">char</field>
+    </record>
+    <record model="ir.model.fields" id="research_product_standard_price">
+        <field name="field_description">Cost</field>
+        <field name="name">x_product_cost</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="related">x_product_id.product_tmpl_id.standard_price</field>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="research_product_vendor">
+        <field name="field_description">Supplier</field>
+        <field name="name">x_product_vendor</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="relation">res.partner</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="research_product_in_stock">
+        <field name="field_description">When in Stock</field>
+        <field name="name">x_product_in_stock</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">date</field>
+    </record>
+    <record model="ir.model.fields" id="research_product_lead_time">
+        <field name="field_description">Lead Time</field>
+        <field name="name">x_product_lead_time</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">char</field>
+    </record>
     <record model="ir.model.fields" id="research_Job">
         <field name="field_description">Job</field>
         <field name="name">x_job_id</field>
@@ -85,8 +143,19 @@
     </record>
 
     <record model="ir.model.fields" id="research_notes">
-        <field name="field_description">Notes</field>
+        <field name="field_description">Description Notes</field>
         <field name="name">x_notes</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">text</field>
+    </record>
+    <record model="ir.model.fields" id="research_internal_notes">
+        <field name="field_description">Internal Notes</field>
+        <field name="name">x_internal_notes</field>
         <field name="model">x_crm.research</field>
         <field name="model_id" ref="gs_custo_ps.model_crm_research" />
         <field name="on_delete">set null</field>
@@ -107,7 +176,7 @@
         <field name="ttype">float</field>
     </record>
     <record model="ir.model.fields" id="research_price">
-        <field name="field_description">Price</field>
+        <field name="field_description">Sell Price</field>
         <field name="name">x_price</field>
         <field name="model">x_crm.research</field>
         <field name="model_id" ref="gs_custo_ps.model_crm_research" />
@@ -208,7 +277,7 @@
             for invoice in order.invoice_ids:
               if invoice.state in ['open','paid']:
                 total_invoiced += invoice.amount_total
-          record['x_invoiced'] = total_invoiced
+          record['x_button_invoiced'] = total_invoiced
         ]]></field>
     </record>
     <record model="ir.model.fields" id="lead_billed">
@@ -224,7 +293,7 @@
         <field name="ttype">float</field>
         <field name="compute"><![CDATA[for record in self:
           sale_orders = record.order_ids.mapped('name')
-          purchase_orders = record.env['purchase.order'].search([('group_id.name','in',sale_orders)])
+          purchase_orders = record.env['purchase.order'].search([('origin','in',sale_orders)])
           total_billed = 0
           for purchase in purchase_orders:
             for invoice in purchase.invoice_ids:
@@ -246,11 +315,11 @@
         <field name="ttype">float</field>
         <field name="compute"><![CDATA[for record in self:
           sale_orders = record.order_ids.mapped('name')
-          purchase_orders = record.env['purchase.order'].search([('group_id.name','in',sale_orders)])
+          purchase_orders = record.env['purchase.order'].search([('origin','in',sale_orders)])
           total_billed = 0
           for purchase in purchase_orders:
                 total_billed += purchase.amount_total
-          record['x_billed'] = total_billed
+          record['x_button_purchase'] = total_billed
         ]]></field>
     </record>
     <record model="ir.model.fields" id="lead_profit">
@@ -365,6 +434,74 @@
         <field name="state">manual</field>
         <field name="store" eval="True"/>
         <field name="ttype">boolean</field>
+    </record>
+    <record model="ir.model.fields" id="product_handle">
+        <field name="field_description">Handle</field>
+        <field name="name">x_handle</field>
+        <field name="model">product.template</field>
+        <field name="model_id" ref="product.model_product_template" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">char</field>
+    </record>
+    <record model="ir.model.fields" id="purchase_order_job_number">
+        <field name="field_description">Job #</field>
+        <field name="name">x_job_number</field>
+        <field name="model">purchase.order</field>
+        <field name="model_id" ref="purchase.model_purchase_order" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="False"/>
+        <field name="readonly" eval="True"/>
+        <field name="ttype">char</field>
+        <field name="compute"><![CDATA[for record in self:
+        sale_order = record.env['sale.order'].search([('name','=',record.origin)],limit=1)
+        if sale_order:
+          record['x_job_number'] = sale_order.opportunity_id.x_job_number
+        ]]></field>
+    </record>
+    <record model="ir.model.fields" id="purchase_order_shipper">
+        <field name="field_description">Shipping Company</field>
+        <field name="name">x_shipper</field>
+        <field name="model">purchase.order</field>
+        <field name="model_id" ref="purchase.model_purchase_order" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="False"/>
+        <field name="relation">res.partner</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="stock_picking_shipper">
+        <field name="field_description">Shipping Company</field>
+        <field name="name">x_shipper</field>
+        <field name="model">stock.picking</field>
+        <field name="model_id" ref="sale_stock.model_stock_picking" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="False"/>
+        <field name="readonly" eval="True"/>
+        <field name="related">purchase_id.x_shipper</field>
+        <field name="relation">res.partner</field>
+        <field name="ttype">many2one</field>
+    </record>
+    <record model="ir.model.fields" id="stock_picking_job #">
+        <field name="field_description">Job #</field>
+        <field name="name">x_job_number</field>
+        <field name="model">stock.picking</field>
+        <field name="model_id" ref="sale_stock.model_stock_picking" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="False"/>
+        <field name="readonly" eval="True"/>
+        <field name="related">purchase_id.x_job_number</field>
+        <field name="ttype">char</field>
     </record>
   </data>
 </odoo>

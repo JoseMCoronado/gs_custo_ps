@@ -13,6 +13,7 @@ Core workflow customizations/developments.
     'data': [
         'data/ir_model.xml',
         'data/ir_model_fields.xml',
+        'data/ir_actions_server.xml',
         'data/ir_ui_views.xml',
         'data/base_automation.xml',
         'data/created_records.xml',
