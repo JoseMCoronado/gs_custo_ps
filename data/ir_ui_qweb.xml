@@ -72,7 +72,7 @@
                                           <span t-field="l.x_product_id.name"/>
                                         </div>
                                         <div t-if="display_image">
-                                          <img t-if="l.x_product_image" t-att-src="'data:image/png;base64,%s' %l.x_product_image" style="max-height: 200px;"/>
+                                          <img t-if="l.x_product_image" t-att-src="'data:image/png;base64,%s' % to_text(l.x_product_image)" style="max-height: 200px;"/>
                                         </div>
                                       </td>
                                       <td width="35%">
@@ -129,7 +129,6 @@
         <field name="name">Research Template</field>
         <field name="model_id" ref="sale_crm.model_crm_lead"/>
         <field name="report_template" ref="gs_custo_ps.report_report_research"/>
-        <field name="partner_to">${object.partner_id != False and obj.partner_id.id}</field>
         <field name="subject">TEST RESEARCH REPORT</field>
     </record>
     <record model="ir.ui.view" id="saleorder_document_mod">
@@ -144,7 +143,7 @@
             <th t-if="display_image"> </th>
           </xpath>
           <xpath expr="//tbody[@class='sale_tbody']//span[@t-field='l.name']/.." position="before">
-              <td t-if="display_image"><img t-if="l.product_id.image_medium" t-att-src="'data:image/png;base64,'+l.product_id.image_medium" style="max-height: 150px;"/></td>
+              <td t-if="display_image"><img t-if="l.product_id.image_medium" t-att-src="'data:image/png;base64,%s' % to_text(l.product_id.image_medium)" style="max-height: 150px;"/></td>
           </xpath>
         </field>
     </record>
@@ -306,44 +305,35 @@
                       </div>-->
                       <div class="row">
                           <div class="col-xs-4 ">
-                              <strong>Pickup address:</strong>
-                              <div t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                                  <p t-if="o.partner_id.vat"><t t-esc="o.company_id.country_id.vat_label or 'TIN'"/>: <span t-field="o.partner_id.vat"/></p>
+                              <strong t-if="not o.x_shipper_id">Partner:</strong>
+                              <strong t-if="o.x_shipper_id">Pickup address:</strong>
+                              <div t-field="o.x_partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                           </div>
                           <div class="col-xs-4">
                               <strong>Shipping address:</strong>
-                              <div t-if="o.dest_address_id">
-                                  <div t-field="o.dest_address_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                              <div t-if="o.x_delivery_id">
+                                  <div t-field="o.x_delivery_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
                               </div>
-
-                              <div t-if="not o.dest_address_id and o.picking_type_id and o.picking_type_id.warehouse_id">
-                                  <span t-field="o.picking_type_id.warehouse_id.name"/>
-                                  <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
-                              </div>
-                              <div>
+                          <div>
                                 <strong>Delivery Hours</strong>
                               </div>
-                              <div t-if="o.dest_address_id">
-                                  <div t-field="o.dest_address_id.x_delivery_hours"/>
-                                  <div><i t-if="o.dest_address_id.x_lift_gate != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.dest_address_id.x_lift_gate == True" class="fa fa-check-square-o" aria-hidden="true"></i> Lift Gate</div>
-                                  <div><i t-if="o.dest_address_id.x_loading_dock != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.dest_address_id.x_loading_dock == True" class="fa fa-check-square-o" aria-hidden="true"></i> Loading Dock</div>
-                                  <div><i t-if="o.dest_address_id.x_business != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.dest_address_id.x_business == True" class="fa fa-check-square-o" aria-hidden="true"></i> Business</div>
-                                  <div><i t-if="o.dest_address_id.x_call_ahead != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.dest_address_id.x_call_ahead == True" class="fa fa-check-square-o" aria-hidden="true"></i> Call Ahead</div>
-                              </div>
-                              <div t-if="not o.dest_address_id and o.picking_type_id and o.picking_type_id.warehouse_id">
-                                  <span t-field="o.picking_type_id.warehouse_id.name"/>
-                                  <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                              <div t-if="o.x_delivery_id">
+                                  <div t-field="o.x_delivery_id.x_delivery_hours"/>
+                                  <div><i t-if="o.x_delivery_id.x_lift_gate != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.x_delivery_id.x_lift_gate == True" class="fa fa-check-square-o" aria-hidden="true"></i> Lift Gate</div>
+                                  <div><i t-if="o.x_delivery_id.x_loading_dock != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.x_delivery_id.x_loading_dock == True" class="fa fa-check-square-o" aria-hidden="true"></i> Loading Dock</div>
+                                  <div><i t-if="o.x_delivery_id.x_business != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.x_delivery_id.x_business == True" class="fa fa-check-square-o" aria-hidden="true"></i> Business</div>
+                                  <div><i t-if="o.x_delivery_id.x_call_ahead != True" class="fa fa-square-o" aria-hidden="true"></i><i t-if="o.x_delivery_id.x_call_ahead == True" class="fa fa-check-square-o" aria-hidden="true"></i> Call Ahead</div>
                               </div>
                           </div>
                           <div class="col-xs-4">
-                            <div>Order #: <span t-field="o.origin"/></div>
+                            <div>Request #: <span t-field="o.x_name"/></div>
                             <div>Job #: <span t-field="o.x_job_number"/></div>
-                            <div>Order Date: <span t-field="o.date_order"/></div>
+                            <div>Request Date: <span t-esc="datetime.datetime.now()"/></div>
                           </div>
                       </div>
 
-                      <h2>Shipping Information for <span t-field="o.name"/></h2>
-
+                      <h2 t-if="not o.x_shipper_id">Requesting Shipping Information &amp; Freight Quote for:</h2>
+                      <h2 t-if="o.x_shipper_id">Requesting Freight Quote for:</h2>
                       <table class="table table-condensed">
                           <thead>
                               <tr>
@@ -357,7 +347,7 @@
                               </tr>
                           </thead>
                           <tbody>
-                              <tr t-foreach="o.order_line" t-as="line">
+                              <tr t-foreach="o.x_research_ids" t-as="line">
                                 <td>
                                     <span>Metal Chairs</span>
                                 </td>
@@ -365,8 +355,7 @@
                                     <span>Pallet</span>
                                 </td>
                                 <td>
-                                    <span t-field="line.product_qty"/>
-                                    <span t-field="line.product_uom.name" groups="product.group_uom"/>
+                                    <span t-field="line.x_quantity"/>
                                 </td>
                                 <td>
                                     <span>24 x 15 x 30</span>
@@ -375,15 +364,14 @@
                                     <span>250lbs</span>
                                 </td>
                                 <td>
-                                    <span t-field="line.product_id.default_code"/>
+                                    <span t-field="line.x_product_id.default_code"/>
                                 </td>
                                 <td>
-                                    <span t-field="line.product_id.name"/>
+                                    <span t-field="line.x_product_id.name"/>
                                 </td>
                               </tr>
                           </tbody>
                       </table>
-                      <p t-field="o.notes"/>
                       <div class="oe_structure"/>
                   </div>
               </t>
@@ -400,7 +388,7 @@
           <t t-name="gs_custo_ps.report_shipping_request">
               <t t-call="web.html_container">
                   <t t-foreach="docs" t-as="doc">
-                      <t t-call="gs_custo_ps.report_shipping_request_document" t-lang="doc.partner_id.lang"/>
+                      <t t-call="gs_custo_ps.report_shipping_request_document" t-lang="doc.x_partner_id.lang"/>
                   </t>
               </t>
           </t>
@@ -409,12 +397,12 @@
       <record model="ir.actions.report" id="report_report_shipping_request">
         <field name="name">Shipping Request Document</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="model">purchase.order</field>
+        <field name="model">x_crm.shipping.request</field>
         <field name="report_name">gs_custo_ps.report_shipping_request</field>
       </record>
       <record model="mail.template" id="template_report_shipping_request">
           <field name="name">Shipping Request Template</field>
-          <field name="model_id" ref="purchase.model_purchase_order"/>
+          <field name="model_id" ref="gs_custo_ps.model_shipping_request"/>
           <field name="report_template" ref="gs_custo_ps.report_report_shipping_request"/>
           <field name="subject">TEST SHIPPING REQUEST REPORT</field>
       </record>

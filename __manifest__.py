@@ -9,7 +9,7 @@
     'description': """
 Core workflow customizations/developments.
         """,
-    'depends': ['base','crm','sale'],
+    'depends': ['base','crm','sale','sale_crm','purchase','account'],
     'data': [
         'data/ir_model.xml',
         'data/ir_model_fields.xml',
@@ -17,7 +17,8 @@ Core workflow customizations/developments.
         'data/ir_ui_views.xml',
         'data/base_automation.xml',
         'data/created_records.xml',
-        'data/ir_ui_qweb.xml'
+        'data/ir_ui_qweb.xml',
+        'data/ir_model_access.xml',
     ],
     'installable': True,
 }

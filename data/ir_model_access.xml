@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record model="ir.model.access" id="access_model_research">
+      <field name="name">Global</field>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="model_id" ref="model_crm_research"/>
+    </record>
+    <record model="ir.model.access" id="access_model_progress">
+      <field name="name">Global</field>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="model_id" ref="model_crm_progress"/>
+    </record>
+    <record model="ir.model.access" id="access_model_request">
+      <field name="name">Global</field>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="model_id" ref="model_shipping_request"/>
+    </record>
+  </data>
+</odoo>

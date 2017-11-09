@@ -15,5 +15,13 @@
       <field name="state">manual</field>
       <field name="transient" eval="False"/>
     </record>
+    <record model="ir.model" id="model_shipping_request">
+      <field name="info">Shipping Requests</field>
+      <field name="model">x_crm.shipping.request</field>
+      <field name="name">Shipping Requests</field>
+      <field name="state">manual</field>
+      <field name="transient" eval="False"/>
+      <field name="is_mail_thread" eval="True"/>
+    </record>
   </data>
 </odoo>

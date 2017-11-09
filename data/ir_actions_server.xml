@@ -76,5 +76,33 @@ action = action_data
         ]]>
       </field>
     </record>
+    <record model="ir.actions.act_window" id="action_window_shipping_requests">
+      <field name="name">Shipping Requests</field>
+      <field name="res_model">x_crm.shipping.request</field>
+      <field name="groups_id" eval="[(6, 0, [])]"/>
+      <field name="auto_search" eval="True"/>
+      <field name="context">{}</field>
+      <field name="limit">80</field>
+      <field name="target">current</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.server" id="action_opp_shipping_requests">
+      <field name="model_id" ref="crm.model_crm_lead"/>
+      <field name="name">[JOS] Open Shipping Requests from Opportunity</field>
+      <field name="sequence">5</field>
+      <field name="state">code</field>
+      <field name="code"><![CDATA[
+action_data = env.ref('gs_custo_ps.action_window_shipping_requests').read()[0]
+delivery_address = record.partner_id.child_ids.filtered(lambda r: r.type == 'delivery')
+if delivery_address:
+  selected_delivery = delivery_address[0].id
+else:
+  selected_delivery = record.partner_id.id
+action_data.update({'domain':[('x_opportunity_id','=',record.id)],'context':{'default_x_opportunity_id':record.id,'default_x_delivery_id':selected_delivery}})
+action = action_data
+        ]]>
+      </field>
+    </record>
   </data>
 </odoo>

@@ -19,21 +19,21 @@
                   <span class="o_stat_text"> PO(s) </span>
               </div>
           </button>
-          <button class="oe_stat_button" type="action" name="%(gs_custo_ps.action_opp_transfers)d" icon="fa-pencil-square-o">
+          <button class="oe_stat_button" type="action" name="%(gs_custo_ps.action_opp_shipping_requests)d" icon="fa-pencil-square-o" context="{'default_x_opportunity_id': active_id}">
               <div class="o_stat_info">
-
+                  <span class="o_stat_value"><field name="x_button_requests"/></span>
                   <span class="o_stat_text"> Ship Req(s) </span>
               </div>
           </button>
           <button class="oe_stat_button" type="action" name="%(gs_custo_ps.action_opp_transfers)d" icon="fa-pencil-square-o">
               <div class="o_stat_info">
-
+                  <span class="o_stat_value"><field name="x_button_transfers"/></span>
                   <span class="o_stat_text"> Delivery Order(s) </span>
               </div>
           </button>
           <button class="oe_stat_button" type="action" name="%(gs_custo_ps.action_opp_activities)d" icon="fa-bolt">
               <div class="o_stat_info">
-
+                  <span class="o_stat_value"><field name="x_button_activities"/></span>
                   <span class="o_stat_text"> Activities </span>
               </div>
           </button>
@@ -62,12 +62,15 @@
         <xpath expr="//notebook" position="inside">
           <page string="Research" autofocus="autofocus">
               <field name="x_research_ids" mode="kanban" context="{'default_x_job_id': active_id}">
-                  <kanban default_order="x_type">
+                  <kanban default_order="x_product_id asc">
                       <field name="x_color"/>
                       <field name="x_job_id"/>
                       <field name="x_product_id"/>
                       <field name="x_product_image"/>
                       <field name="x_type"/>
+                      <field name="x_product_vendor"/>
+                      <field name="x_price"/>
+                      <field name="x_quantity"/>
                       <templates>
                           <t t-name="kanban-box">
                               <t t-set="color" t-value="kanban_color(record.x_color.raw_value)"/>
@@ -82,7 +85,9 @@
                                   <div class="oe_kanban_details">
                                       <div t-if="record.x_type"><field name="x_type"/></div>
                                       <div t-if="record.x_product_id.raw_value"><field name="x_product_id"/></div>
-                                      <div style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" t-if="record.x_notes.raw_value"><field name="x_notes"/></div>
+                                      <div t-if="record.x_product_vendor"><field name="x_product_vendor"/></div>
+                                      <div t-if="record.x_price">$<field name="x_price"/></div>
+                                      <div t-if="record.x_quantity">Qty: <field name="x_quantity"/></div>
                                       <div><field name="x_approved" widget="priority"/></div>
                                   </div>
                               </div>
@@ -98,14 +103,14 @@
                           <hr/>
                           <div>
                             <div class="col-xs-4">
-                              <field name="x_product_image" widget="image"/>
+                              <field name="x_product_image"/>
                             </div>
                             <div class="col-xs-8">
                               <group string="Details">
                                   <group>
                                       <field name="x_product_id"/>
                                       <field name="x_product_sku" readonly="1"/>
-                                      <field name="x_product_vendor" readonly="1"/>
+                                      <field name="x_product_vendor"/>
                                       <field name="x_quantity"/>
                                       <field name="x_subtotal" invisible="1"/>
                                   </group>
@@ -115,7 +120,9 @@
                                     <field name="x_product_cost" readonly="1"/>
                                     <field name="x_price"/>
                                     <field name="x_product_in_stock"/>
+                                    <field name="x_stock_oos"/>
                                     <field name="x_product_lead_time"/>
+                                    <field name="x_project_due_date"/>
                                   </group>
                               </group>
                               <group string="Description Notes">
@@ -155,6 +162,8 @@
         <xpath expr="//field[@name='sale_amount_total']/../../.." position="attributes">
           <attribute name="attrs">{}</attribute>
         </xpath>
+        <xpath expr="//button[@name='action_set_won']" position="replace"/>
+        <xpath expr="//button[@name='%(crm.crm_lead_lost_action)d']" position="replace"/>
       </field>
     </record>
     <record model="ir.ui.view" id="crm_case_kanban_view_leads_mod">
@@ -224,6 +233,30 @@
             <field name="x_business" attrs="{'invisible':[('type','!=','delivery')]}"/>
             <field name="x_call_ahead" attrs="{'invisible':[('type','!=','delivery')]}"/>
           </xpath>
+          <xpath expr="//field[@name='email']" position="attributes">
+            <attribute name="string">Order Email</attribute>
+          </xpath>
+          <xpath expr="//field[@name='email']" position="attributes">
+            <attribute name="string">Order Email</attribute>
+          </xpath>
+          <xpath expr="//field[@name='category_id']" position="after">
+            <field name="x_inventory_link" widget="url"/>
+            <field name="x_account_status"/>
+          </xpath>
+          <xpath expr="//notebook//page" position="after">
+            <page string="Account Info">
+              <group>
+                <group>
+                  <field name="x_website" widget="url"/>
+                  <field name="x_check_inventory"/>
+                </group>
+                <group>
+                  <field name="x_login"/>
+                  <field name="x_login_password"/>
+                </group>
+              </group>
+            </page>
+          </xpath>
         </field>
       </record>
       <record model="ir.ui.view" id="product_template_search_view_mod">
@@ -262,6 +295,17 @@
             </xpath>
           </field>
       </record>
+      <record model="ir.ui.view" id="purchase_order_tree_mod">
+          <field name="name">x_jos.purchase.order.tree.mod</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+          <field name="priority">99</field>
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+              <field name="x_job_number"/>
+            </xpath>
+          </field>
+      </record>
       <record model="ir.ui.view" id="stock_picking_form_mod">
           <field name="name">x_jos.stock.picking.form.mod</field>
           <field name="model">stock.picking</field>
@@ -271,7 +315,72 @@
             <xpath expr="//field[@name='partner_id']" position="before">
               <field name="x_job_number"/>
               <field name="x_shipper" attrs="{'invisible':[('x_shipper','=',False)]}"/>
+              <field name="x_tracking_num"/>
+              <field name="x_tracking_url" widget="url"/>
             </xpath>
+          </field>
+      </record>
+      <!-- SHIPPING REQUEST VIEWS-->
+      <record model="ir.ui.view" id="shipping_request_form">
+          <field name="name">x_jos.shipping.request.form</field>
+          <field name="model">x_crm.shipping.request</field>
+          <field name="inherit_id" eval="False"/>
+          <field name="priority">16</field>
+          <field name="groups_id" eval="[(6, 0, [])]"/>
+          <field name="type">form</field>
+          <field name="mode">primary</field>
+          <field name="arch" type="xml">
+            <form>
+              <sheet>
+                <div class="oe_title">
+                  <h1><field name="x_name"/></h1>
+                </div>
+                <group>
+                  <group>
+                    <field name="x_job_number"/>
+                    <field name="x_opportunity_id"/>
+                  </group>
+                  <group>
+                    <field name="x_partner_id"/>
+                    <field name="x_shipper_id"/>
+                    <field name="x_delivery_id"/>
+                  </group>
+                </group>
+                <group>
+                  <field name="x_research_ids" nolabel="1">
+                    <tree>
+                            <field name="x_product_id"/>
+                            <field name="x_quantity"/>
+                            <field name="x_product_lead_time"/>
+                            <field name="x_project_due_date"/>
+                            <field name="x_notes"/>
+                    </tree>
+                  </field>
+                </group>
+              </sheet>
+              <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"/>
+                <field name="message_ids" widget="mail_thread"/>
+              </div>
+            </form>
+          </field>
+      </record>
+      <record model="ir.ui.view" id="shipping_request_tree">
+          <field name="name">x_jos.shipping.request.tree</field>
+          <field name="model">x_crm.shipping.request</field>
+          <field name="inherit_id" eval="False"/>
+          <field name="priority">16</field>
+          <field name="groups_id" eval="[(6, 0, [])]"/>
+          <field name="type">tree</field>
+          <field name="mode">primary</field>
+          <field name="arch" type="xml">
+            <tree>
+              <field name="x_name"/>
+              <field name="x_job_number"/>
+              <field name="x_partner_id"/>
+              <field name="x_shipper_id"/>
+              <field name="x_delivery_id"/>
+            </tree>
           </field>
       </record>
 </odoo>

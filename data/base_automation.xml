@@ -20,6 +20,56 @@
       ]]>
     </field>
   </record>
+  <!--Sequence for Shipping Requests-->
+  <record model="ir.sequence" id="sequence_shipping_request">
+    <field name="name"> Shipping Request Sequence</field>
+    <field name="padding">6</field>
+    <field name="number_increment">1</field>
+    <field name="prefix">SR/</field>
+    <field name="code">gs_custo_ps.sequence_shipping_request</field>
+  </record>
+  <record model="base.automation" id="action_assign_shipping_request_seq">
+    <field name="name">[JOS] Assign Shipping Request Sequence</field>
+    <field name="trigger">on_create</field>
+    <field name="model_id" ref="gs_custo_ps.model_shipping_request"/>
+    <field name="state">code</field>
+    <field name="code">
+      <![CDATA[
+      if record.id:
+        code = str(env['ir.sequence'].next_by_code('gs_custo_ps.sequence_shipping_request'))
+        record['x_name'] = code
+      ]]>
+    </field>
+  </record>
+  <record model="base.automation" id="action_filter_vendors_request">
+    <field name="name">[JOS] Filter Vendor Request</field>
+    <field name="trigger">on_change</field>
+    <field name="model_id" ref="gs_custo_ps.model_shipping_request"/>
+    <field name="state">code</field>
+    <field name="on_change_fields">x_opportunity_id</field>
+    <field name="code">
+      <![CDATA[
+      if record.x_opportunity_id:
+          vendors = record.x_opportunity_id.x_research_ids.mapped('x_product_vendor')
+          action = {'domain': {'x_partner_id': [('id', 'in', vendors.ids)]}}
+      ]]>
+    </field>
+  </record>
+  <record model="base.automation" id="action_add_research_items_from_vendor">
+    <field name="name">[JOS] Add Research Items Per Vendor</field>
+    <field name="trigger">on_change</field>
+    <field name="model_id" ref="gs_custo_ps.model_shipping_request"/>
+    <field name="state">code</field>
+    <field name="on_change_fields">x_partner_id</field>
+    <field name="code">
+      <![CDATA[
+      if record.x_partner_id:
+          research_items = record.x_opportunity_id.x_research_ids.filtered(lambda r: r.x_product_vendor == record.x_partner_id).ids
+          record['x_research_ids'] = [(6, 0, research_items)]
+      ]]>
+    </field>
+  </record>
+  <!--CREATION OF QUOTATION-->
   <record model="base.automation" id="action_create_quotation_lines">
     <field name="name">[JOS] Create Quotation Lines from Opp</field>
     <field name="trigger">on_change</field>
@@ -55,8 +105,12 @@
     <field name="code">
       <![CDATA[
       if record.x_product_id:
+        if record.x_product_id.seller_ids:
+          vendorselected = record.x_product_id.seller_ids[0].name.id
+        else:
+          vendorselected = False
         vals = {
-               'x_product_vendor': record.x_product_id.seller_ids[0].name.id or False,
+               'x_product_vendor': vendorselected,
                'x_price': record.x_product_id.list_price or False,
                'x_notes': record.x_product_id.description_sale or False,
             }
