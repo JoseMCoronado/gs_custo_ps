@@ -337,31 +337,35 @@
                       <table class="table table-condensed">
                           <thead>
                               <tr>
-                                  <th><strong>Product Type</strong></th>
-                                  <th><strong>Pallet/Boxes</strong></th>
-                                  <th><strong>Qty</strong></th>
+                                  <th t-if="o.x_shipper_id"><strong>Product Type</strong></th>
+                                  <th t-if="o.x_shipper_id"><strong>Pallet/Boxes</strong></th>
+                                  <th t-if="o.x_shipper_id"><strong>Pallet/Bpx Qty</strong></th>
+                                  <th t-if="o.x_shipper_id"><strong>Product Qty</strong></th>
                                   <th><strong>Dimensions</strong></th>
-                                  <th><strong>Weight</strong></th>
+                                  <th t-if="o.x_shipper_id"><strong>Weight</strong></th>
                                   <th><strong>Code</strong></th>
                                   <th><strong>Product Name</strong></th>
                               </tr>
                           </thead>
                           <tbody>
                               <tr t-foreach="o.x_research_ids" t-as="line">
-                                <td>
-                                    <span>Metal Chairs</span>
+                                <td t-if="o.x_shipper_id">
+                                    <span t-field="line.x_sr_product_type"/>
                                 </td>
-                                <td>
-                                    <span>Pallet</span>
+                                <td t-if="o.x_shipper_id">
+                                    <span t-field="line.x_sr_pallet_box"/>
+                                </td>
+                                <td t-if="o.x_shipper_id">
+                                    <span t-field="line.x_sr_pallet_box_qty"/>
                                 </td>
                                 <td>
                                     <span t-field="line.x_quantity"/>
                                 </td>
-                                <td>
-                                    <span>24 x 15 x 30</span>
+                                <td t-if="o.x_shipper_id">
+                                    <span t-field="line.x_sr_dimensions"/>
                                 </td>
-                                <td>
-                                    <span>250lbs</span>
+                                <td t-if="o.x_shipper_id">
+                                    <span t-field="line.x_sr_weight"/>
                                 </td>
                                 <td>
                                     <span t-field="line.x_product_id.default_code"/>

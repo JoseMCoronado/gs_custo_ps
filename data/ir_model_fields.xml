@@ -225,6 +225,63 @@
           record['x_subtotal'] = record.x_quantity * record.x_price
         ]]></field>
     </record>
+    <!-- Research Fields - For Shipping Request-->
+    <record model="ir.model.fields" id="research_sr_product_type">
+        <field name="field_description">Product Type</field>
+        <field name="name">x_sr_product_type</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">char</field>
+    </record>
+    <record model="ir.model.fields" id="research_sr_pallet_box">
+        <field name="field_description">Pallet/Box</field>
+        <field name="name">x_sr_pallet_box</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="selection">[['box', 'Boxes'], ['pallet', 'Pallets']]</field>
+        <field name="ttype">selection</field>
+    </record>
+    <record model="ir.model.fields" id="research_sr_pallet_box_qty">
+        <field name="field_description">Pallet/Box Quantity</field>
+        <field name="name">x_sr_pallet_box_qty</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
+    <record model="ir.model.fields" id="research_dimensions">
+        <field name="field_description">Dimensions</field>
+        <field name="name">x_sr_dimensions</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">char</field>
+    </record>
+    <record model="ir.model.fields" id="research_sr_weight">
+        <field name="field_description">Weight</field>
+        <field name="name">x_sr_weight</field>
+        <field name="model">x_crm.research</field>
+        <field name="model_id" ref="gs_custo_ps.model_crm_research"/>
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="ttype">float</field>
+    </record>
     <!--CRM Progress Fields -->
     <record model="ir.model.fields" id="progress_name">
         <field name="field_description">Progress Name</field>
