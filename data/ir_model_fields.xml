@@ -229,8 +229,8 @@
     <record model="ir.model.fields" id="research_sr_product_type">
         <field name="field_description">Product Type</field>
         <field name="name">x_sr_product_type</field>
-        <field name="model">x_crm.research</field>
-        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="model">x_crm.shipping.request</field>
+        <field name="model_id" ref="gs_custo_ps.model_shipping_request" />
         <field name="on_delete">set null</field>
         <field name="selectable" eval="True"/>
         <field name="state">manual</field>
@@ -240,8 +240,8 @@
     <record model="ir.model.fields" id="research_sr_pallet_box">
         <field name="field_description">Pallet/Box</field>
         <field name="name">x_sr_pallet_box</field>
-        <field name="model">x_crm.research</field>
-        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="model">x_crm.shipping.request</field>
+        <field name="model_id" ref="gs_custo_ps.model_shipping_request" />
         <field name="on_delete">set null</field>
         <field name="selectable" eval="True"/>
         <field name="state">manual</field>
@@ -252,8 +252,8 @@
     <record model="ir.model.fields" id="research_sr_pallet_box_qty">
         <field name="field_description">Pallet/Box Quantity</field>
         <field name="name">x_sr_pallet_box_qty</field>
-        <field name="model">x_crm.research</field>
-        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="model">x_crm.shipping.request</field>
+        <field name="model_id" ref="gs_custo_ps.model_shipping_request" />
         <field name="on_delete">set null</field>
         <field name="selectable" eval="True"/>
         <field name="state">manual</field>
@@ -263,8 +263,8 @@
     <record model="ir.model.fields" id="research_dimensions">
         <field name="field_description">Dimensions</field>
         <field name="name">x_sr_dimensions</field>
-        <field name="model">x_crm.research</field>
-        <field name="model_id" ref="gs_custo_ps.model_crm_research" />
+        <field name="model">x_crm.shipping.request</field>
+        <field name="model_id" ref="gs_custo_ps.model_shipping_request" />
         <field name="on_delete">set null</field>
         <field name="selectable" eval="True"/>
         <field name="state">manual</field>
@@ -274,8 +274,8 @@
     <record model="ir.model.fields" id="research_sr_weight">
         <field name="field_description">Weight</field>
         <field name="name">x_sr_weight</field>
-        <field name="model">x_crm.research</field>
-        <field name="model_id" ref="gs_custo_ps.model_crm_research"/>
+        <field name="model">x_crm.shipping.request</field>
+        <field name="model_id" ref="gs_custo_ps.model_shipping_request" />
         <field name="on_delete">set null</field>
         <field name="selectable" eval="True"/>
         <field name="state">manual</field>
@@ -787,6 +787,19 @@
         <field name="related">purchase_id.x_job_number</field>
         <field name="ttype">char</field>
     </record>
+    <record model="ir.model.fields" id="sale_order_job_num">
+        <field name="field_description">Job #</field>
+        <field name="name">x_job_number</field>
+        <field name="model">sale.order</field>
+        <field name="model_id" ref="sale.model_sale_order" />
+        <field name="on_delete">set null</field>
+        <field name="selectable" eval="True"/>
+        <field name="state">manual</field>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="False"/>
+        <field name="related">opportunity_id.x_job_number</field>
+        <field name="ttype">char</field>
+    </record>
     <record model="ir.model.fields" id="stock_picking_tracking_num">
         <field name="field_description">Tracking #</field>
         <field name="name">x_tracking_num</field>
@@ -795,8 +808,8 @@
         <field name="on_delete">set null</field>
         <field name="selectable" eval="True"/>
         <field name="state">manual</field>
-        <field name="store" eval="False"/>
-        <field name="readonly" eval="True"/>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="False"/>
         <field name="ttype">char</field>
     </record>
     <record model="ir.model.fields" id="stock_picking_tracking_url">
@@ -807,8 +820,8 @@
         <field name="on_delete">set null</field>
         <field name="selectable" eval="True"/>
         <field name="state">manual</field>
-        <field name="store" eval="False"/>
-        <field name="readonly" eval="True"/>
+        <field name="store" eval="True"/>
+        <field name="readonly" eval="False"/>
         <field name="ttype">char</field>
     </record>
     <!-- INVOICE FIELDS -->

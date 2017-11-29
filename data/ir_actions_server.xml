@@ -104,5 +104,17 @@ action = action_data
         ]]>
       </field>
     </record>
+    <record model="mail.template" id="template_send_tracking_email">
+        <field name="name">Send Tracking Email</field>
+        <field name="model_id" ref="stock.model_stock_picking"/>
+        <field name="subject">Send Tracking Email</field>
+    </record>
+    <record model="ir.actions.server" id="action_send_tracking_email">
+      <field name="model_id" ref="stock.model_stock_picking"/>
+      <field name="name">[JOS] Send Tracking Email</field>
+      <field name="sequence">5</field>
+      <field name="state">email</field>
+      <field name="template_id" ref="gs_custo_ps.template_send_tracking_email"/>
+    </record>
   </data>
 </odoo>

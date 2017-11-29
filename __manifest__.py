@@ -9,7 +9,7 @@
     'description': """
 Core workflow customizations/developments.
         """,
-    'depends': ['base','crm','sale','sale_crm','purchase','account'],
+    'depends': ['base','crm','sale','sale_crm','purchase','account','base_automation'],
     'data': [
         'data/ir_model.xml',
         'data/ir_model_fields.xml',

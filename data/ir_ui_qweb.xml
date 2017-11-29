@@ -57,6 +57,7 @@
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Description</th>
                                     <th>Notes</th>
                                     <th class="text-right">Quantity</th>
@@ -65,9 +66,14 @@
                                 </tr>
                            </thead>
                            <tbody class="sale_tbody">
+                               <t t-set="index" t-value="0"/>
                                <t t-foreach="doc.x_research_ids" t-as="l">
                                   <tr t-if="l.x_type.name == page[0]">
-                                      <td width="35%">
+                                      <t t-set="index" t-value="index + 1"/>
+                                      <td width="10%" class="text-right">
+                                          <span t-esc="index"/>
+                                      </td>
+                                      <td width="30%">
                                         <div>
                                           <span t-field="l.x_product_id.name"/>
                                         </div>
@@ -75,7 +81,7 @@
                                           <img t-if="l.x_product_image" t-att-src="'data:image/png;base64,%s' % to_text(l.x_product_image)" style="max-height: 200px;"/>
                                         </div>
                                       </td>
-                                      <td width="35%">
+                                      <td width="30%">
                                           <span t-field="l.x_notes"/>
                                       </td>
                                       <td width="10%" class="text-right">
@@ -312,7 +318,20 @@
                           <div class="col-xs-4">
                               <strong>Shipping address:</strong>
                               <div t-if="o.x_delivery_id">
-                                  <div t-field="o.x_delivery_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True, &quot;phone_icons&quot;: True}"/>
+                                  <div t-if="o.x_delivery_id.parent_id" t-field="o.x_delivery_id.parent_id.name"/>
+                                  <div t-if="o.x_delivery_id.street" t-field="o.x_delivery_id.street"/>
+                                  <div t-if="o.x_delivery_id.street2" t-field="o.x_delivery_id.street2"/>
+                                  <div>
+                                    <span>
+                                      <span t-if="o.x_delivery_id.city"><span t-field="o.x_delivery_id.city"/> </span>
+                                      <span t-if="o.x_delivery_id.state_id"><span t-field="o.x_delivery_id.state_id.code"/> </span>
+                                      <span t-if="o.x_delivery_id.zip"><span t-field="o.x_delivery_id.zip"/> </span>
+                                    </span>
+                                  </div>
+                                  <div t-if="o.x_delivery_id.name">
+                                    <span>ATTN: </span><span t-field="o.x_delivery_id.name"/>
+                                  </div>
+                                  <div t-if="o.x_delivery_id.phone" t-field="o.x_delivery_id.phone"/>
                               </div>
                           <div>
                                 <strong>Delivery Hours</strong>
@@ -339,39 +358,48 @@
                               <tr>
                                   <th t-if="o.x_shipper_id"><strong>Product Type</strong></th>
                                   <th t-if="o.x_shipper_id"><strong>Pallet/Boxes</strong></th>
-                                  <th t-if="o.x_shipper_id"><strong>Pallet/Bpx Qty</strong></th>
-                                  <th t-if="o.x_shipper_id"><strong>Product Qty</strong></th>
-                                  <th><strong>Dimensions</strong></th>
+                                  <th t-if="o.x_shipper_id"><strong>Pallet/Box Qty</strong></th>
+                                  <th t-if="not o.x_shipper_id"><strong>Product Qty</strong></th>
+                                  <th t-if="not o.x_shipper_id"><strong>Cost</strong></th>
+                                  <th t-if="o.x_shipper_id"><strong>Dimensions</strong></th>
                                   <th t-if="o.x_shipper_id"><strong>Weight</strong></th>
-                                  <th><strong>Code</strong></th>
-                                  <th><strong>Product Name</strong></th>
+                                  <th t-if="not o.x_shipper_id"><strong>SKU</strong></th>
+                                  <th t-if="not o.x_shipper_id"><strong>Product Name</strong></th>
                               </tr>
                           </thead>
-                          <tbody>
+                          <tbody t-if="not o.x_shipper_id">
                               <tr t-foreach="o.x_research_ids" t-as="line">
-                                <td t-if="o.x_shipper_id">
-                                    <span t-field="line.x_sr_product_type"/>
-                                </td>
-                                <td t-if="o.x_shipper_id">
-                                    <span t-field="line.x_sr_pallet_box"/>
-                                </td>
-                                <td t-if="o.x_shipper_id">
-                                    <span t-field="line.x_sr_pallet_box_qty"/>
-                                </td>
                                 <td>
                                     <span t-field="line.x_quantity"/>
                                 </td>
-                                <td t-if="o.x_shipper_id">
-                                    <span t-field="line.x_sr_dimensions"/>
-                                </td>
-                                <td t-if="o.x_shipper_id">
-                                    <span t-field="line.x_sr_weight"/>
+                                <td>
+                                  <span t-field="line.x_product_cost"/>
                                 </td>
                                 <td>
                                     <span t-field="line.x_product_id.default_code"/>
                                 </td>
                                 <td>
                                     <span t-field="line.x_product_id.name"/>
+                                </td>
+                              </tr>
+                          </tbody>
+                          <tbody t-if="o.x_shipper_id">
+                              <tr>
+                                <td>
+                                    <span t-field="o.x_sr_product_type"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.x_sr_pallet_box"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.x_sr_pallet_box_qty"/>
+                                </td>
+
+                                <td>
+                                    <span t-field="o.x_sr_dimensions"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.x_sr_weight"/>
                                 </td>
                               </tr>
                           </tbody>

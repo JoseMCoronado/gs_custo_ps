@@ -233,6 +233,18 @@
             <field name="x_business" attrs="{'invisible':[('type','!=','delivery')]}"/>
             <field name="x_call_ahead" attrs="{'invisible':[('type','!=','delivery')]}"/>
           </xpath>
+          <xpath expr="//field[@name='child_ids']//div[@class='oe_kanban_details']//field[@name='zip']/../.." position="replace">
+            <div t-if="record.type.raw_value != 'contact'">
+                <div>
+                    <field name="street"/>
+                </div>
+                <div>
+                  <field name="city"/>
+                  <field t-if="record.state_id.raw_value" name="state_id"/>
+                  <field name="zip"/>
+                </div>
+            </div>
+          </xpath>
           <xpath expr="//field[@name='email']" position="attributes">
             <attribute name="string">Order Email</attribute>
           </xpath>
@@ -312,11 +324,25 @@
           <field name="inherit_id" ref="stock.view_picking_form"/>
           <field name="priority">99</field>
           <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+              <button name="%(action_send_tracking_email)d" icon="fa-envelope" class="oe_stat_button" string="Send Tracking Email" type="action" attrs="{'invisible': [('x_tracking_num','=',False)]}"/>
+            </xpath>
             <xpath expr="//field[@name='partner_id']" position="before">
               <field name="x_job_number"/>
               <field name="x_shipper" attrs="{'invisible':[('x_shipper','=',False)]}"/>
               <field name="x_tracking_num"/>
               <field name="x_tracking_url" widget="url"/>
+            </xpath>
+          </field>
+      </record>
+      <record model="ir.ui.view" id="vpicktree_mod">
+          <field name="name">x_jos.stock.picking.tree.mod</field>
+          <field name="model">stock.picking</field>
+          <field name="inherit_id" ref="stock.vpicktree"/>
+          <field name="priority">99</field>
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+              <field name="x_job_number"/>
             </xpath>
           </field>
       </record>
@@ -351,32 +377,23 @@
                     <tree>
                             <field name="x_product_id"/>
                             <field name="x_quantity"/>
-                            <field name="x_sr_product_type"/>
-                            <field name="x_sr_pallet_box"/>
-                            <field name="x_sr_pallet_box_qty"/>
-                            <field name="x_sr_dimensions"/>
-                            <field name="x_sr_weight"/>
+                            <field name="x_product_cost"/>
                             <field name="x_product_lead_time"/>
                             <field name="x_project_due_date"/>
                             <field name="x_notes"/>
                     </tree>
-                    <form string="Edit Shipping Request Values">
-                      <sheet>
-                        <group>
-                          <group>
-                            <field name="x_product_id" readonly="1"/>
-                            <field name="x_sr_product_type"/>
-                            <field name="x_sr_dimensions"/>
-                          </group>
-                          <group>
-                            <field name="x_sr_pallet_box"/>
-                            <field name="x_sr_pallet_box_qty"/>
-                            <field name="x_sr_weight"/>
-                          </group>
-                        </group>
-                      </sheet>
-                    </form>
                   </field>
+                </group>
+                <group>
+                  <group>
+                    <field name="x_sr_product_type"/>
+                    <field name="x_sr_dimensions"/>
+                    <field name="x_sr_weight"/>
+                  </group>
+                  <group>
+                    <field name="x_sr_pallet_box"/>
+                    <field name="x_sr_pallet_box_qty"/>
+                  </group>
                 </group>
               </sheet>
               <div class="oe_chatter">
@@ -402,6 +419,39 @@
               <field name="x_shipper_id"/>
               <field name="x_delivery_id"/>
             </tree>
+          </field>
+      </record>
+      <record model="ir.ui.view" id="sale_order_tree_mod">
+          <field name="name">x_jos.sale.order.tree.mod</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_quotation_tree"/>
+          <field name="priority">99</field>
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+              <field name="x_job_number"/>
+            </xpath>
+          </field>
+      </record>
+      <record model="ir.ui.view" id="sale_order_tree_mod">
+          <field name="name">x_jos.sale.order.tree.mod</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_quotation_tree"/>
+          <field name="priority">99</field>
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+              <field name="x_job_number"/>
+            </xpath>
+          </field>
+      </record>
+      <record model="ir.ui.view" id="account_invoice_tree">
+          <field name="name">x_jos.account.invoice.tree.mod</field>
+          <field name="model">account.invoice</field>
+          <field name="inherit_id" ref="account.invoice_tree"/>
+          <field name="priority">99</field>
+          <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="before">
+              <field name="x_job_number"/>
+            </xpath>
           </field>
       </record>
 </odoo>
