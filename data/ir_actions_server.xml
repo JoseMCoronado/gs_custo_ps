@@ -116,5 +116,8 @@ action = action_data
       <field name="state">email</field>
       <field name="template_id" ref="gs_custo_ps.template_send_tracking_email"/>
     </record>
+    <record model="ir.actions.act_window" id="sale_crm.sale_action_quotations">
+      <field name="domain">[('opportunity_id','=',active_id),('state','in',['draft','sent'])]</field>
+    </record>
   </data>
 </odoo>

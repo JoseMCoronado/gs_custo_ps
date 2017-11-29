@@ -158,7 +158,10 @@
         <xpath expr="//field[@name='team_id']" position="after">
           <field name="source_id"/>
         </xpath>
-        <xpath expr="//field[@name='sale_number']/../.." position="replace"/>
+        <xpath expr="//field[@name='sale_number']" position="replace">
+          <field name="sale_number" invisible="1"/>
+          <span class="o_stat_value"><field name="x_quotation" widget="monetary" options="{'currency_field': 'company_currency'}"/></span>
+        </xpath>
         <xpath expr="//field[@name='sale_amount_total']/../../.." position="attributes">
           <attribute name="attrs">{}</attribute>
         </xpath>
